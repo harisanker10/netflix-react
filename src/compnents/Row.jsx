@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import getMovies from "../utils/getMovies";
 import MovieCard from "./MovieCard";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { Circles, Hearts } from "react-loading-icons";
 
 function Row({ title, category }) {
   const [movies, setMovies] = useState([]);
@@ -20,7 +21,7 @@ function Row({ title, category }) {
       <h2 className=" font-bold text-white text-2xl p-4">{title}</h2>
       <MdChevronLeft size={35} className="bg-white opacity-0 absolute z-10 top-1/2 group-hover:opacity-70 transition-all" />
       {
-        isLoading ? <h1 className="text-white text-4xl">Loading...</h1> :
+        isLoading ? <h1 className="text-white text-4xl"><Circles /></h1> :
           <div className="flex overflow-x-scroll scrollbar-hide">
             {
               movies.map(movie => <MovieCard key={movie.id} item={movie} />)

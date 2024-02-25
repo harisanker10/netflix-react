@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import getMovies from '../utils/getMovies';
 import truncate from '../utils/truncate';
+import { Bars } from 'react-loading-icons'
 
 function Main() {
 
@@ -44,7 +45,11 @@ function Main() {
           </div>
         </div>
     )
-        : (<h1>Loading</h1>)
+        :
+        <div className="w-screen h-[75vh] relative flex items-center justify-center">
+          <Bars />
+        </div>
+
     }
   </>
   )
