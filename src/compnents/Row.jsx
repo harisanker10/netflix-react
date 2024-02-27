@@ -4,6 +4,7 @@ import MovieCard from "./MovieCard";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { Circles, Hearts } from "react-loading-icons";
 
+
 function Row({ title, category }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

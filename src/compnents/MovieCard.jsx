@@ -1,5 +1,6 @@
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
+
 function MovieCard({ item }) {
 
   return (
