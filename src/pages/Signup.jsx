@@ -1,25 +1,30 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import SpinningCircles from "react-loading-icons/dist/esm/components/spinning-circles";
+import firebaseErrorFormatter from "../utils/firebaseErrFormatter";
 
 function Signup() {
   const { signUp, user } = UserAuth();
   const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  console.log(user);
 
   function handleOnChange(event) {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   }
 
   const handleOnSubmit = async (event) => {
-    console.log(event);
     event.preventDefault();
+    setIsLoading(true);
     try {
       await signUp(formData.email, formData.password);
       navigate("/");
     } catch (err) {
-      console.log(err);
+      setError(firebaseErrorFormatter(err.code));
+    }finally{
+      setIsLoading(false);
     }
   };
   return (
@@ -53,11 +58,16 @@ function Signup() {
             onChange={handleOnChange}
             placeholder="Password"
           />
+          <h2 className="text-red-600 text-xl font-bold w-full text-center">{error}</h2>
           <button
             type="submit"
             className="bg-red-700 font-black text-xl w-full p-3 rounded mt-8 md:p-4 md:text-2xl"
           >
-            Sign Up
+            {isLoading ? (
+              <SpinningCircles className="h-8 mx-auto" />
+            ) : (
+              "Sign Up"
+            )}
           </button>
           <div className="mt-3 flex w-full justify-between text-lg font-extrabold text-gray-600">
             <div>

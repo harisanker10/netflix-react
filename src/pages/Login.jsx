@@ -1,11 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { useState } from "react";
+import SpinningCircles from "react-loading-icons/dist/esm/components/spinning-circles";
+import firebaseErrorFormatter from "../utils/firebaseErrFormatter";
 
 function Login() {
   const [formData, setFormData] = useState({});
   const { logIn, user } = UserAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleOnChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -13,13 +17,17 @@ function Login() {
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
-      await logIn(formData.email, formData.password); 
-      navigate('/');
+      await logIn(formData.email, formData.password);
+      navigate("/");
     } catch (error) {
-      console.log(error); 
+      console.log(error);
+      setError(firebaseErrorFormatter(error.code));
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center relative">
@@ -29,7 +37,7 @@ function Login() {
         alt="backdrop-image"
       />
 
-      <div className="absolute w-full h-full bg-black/70 z-10">Sign In</div>
+      <div className="absolute w-full h-full bg-black/70 z-10"></div>
 
       <div className="w-[400px] h-[550px] bg-black/90 p-10 rounded-lg shadow-white z-40 box-border text-white md:w-[500px] ">
         <form action="" onSubmit={handleOnSubmit}>
@@ -52,8 +60,18 @@ function Login() {
             placeholder="Password"
             onChange={handleOnChange}
           />
-          <button type="submit" className="bg-red-700 font-black text-xl w-full p-3 rounded mt-8 md:p-4 md:text-2xl">
-            Sign In
+          <h2 className="text-red-600 text-xl font-bold w-full text-center">
+            {error}
+          </h2>
+          <button
+            type="submit"
+            className="bg-red-700 font-black text-xl w-full p-3 rounded mt-8 md:p-4 md:text-2xl"
+          >
+            {isLoading ? (
+              <SpinningCircles className="h-8 mx-auto" />
+            ) : (
+              "Sign In"
+            )}
           </button>
           <div className="mt-3 flex w-full justify-between text-lg font-extrabold text-gray-600">
             <div>

@@ -10,6 +10,7 @@ const Navbar = () => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
 
+  console.log("user........", user);
   const handleOnChange = (event) => {
     setSearchString(event.target.value);
     (async () => {
@@ -19,6 +20,56 @@ const Navbar = () => {
 
   const handleOnBlur = () => {
     setMovies([]);
+  };
+
+  const navButtons = () => {
+    if (user === null) {
+      console.log("user is null");
+      return (
+        <div>
+          <Link to="/login">
+            <button className="rounded px-4 py-2 text-lg font-bold text-white md:text-2xl">
+              Sign In
+            </button>
+          </Link>
+          <Link to="/signup">
+            <button className="rounded bg-red-600 px-4 py-2 text-lg font-bold text-white md:text-2xl">
+              Sign Up
+            </button>
+          </Link>
+        </div>
+      );
+    } else if (user === undefined) {
+      console.log("user is undefined");
+      return (
+        <div>
+          <button className="rounded px-4 py-2 text-lg font-bold text-white md:text-2xl"></button>
+          <button className="rounded bg-red-600 px-4 py-2 text-lg font-bold text-red-600  md:text-2xl">
+            Log Out
+          </button>
+        </div>
+      );
+    } else if (user?.email) {
+      console.log("user is present");
+      return (
+        <div>
+          <Link to="/login">
+            <button className="rounded px-4 py-2 text-lg font-bold text-white md:text-2xl">
+              Account
+            </button>
+          </Link>
+          <button
+            onClick={() => {
+              navigate("/");
+              logOut();
+            }}
+            className="rounded bg-red-600 px-4 py-2 text-lg font-bold text-white md:text-2xl"
+          >
+            Log Out
+          </button>
+        </div>
+      );
+    }
   };
 
   return (
@@ -43,39 +94,7 @@ const Navbar = () => {
           {<SearchListCards movies={movies} />}
         </div>
       </div>
-      {user?.email ? (
-        <div>
-          <Link to="/login">
-            <button className="rounded px-4 py-2 text-lg font-bold text-white md:text-2xl">
-              Account
-            </button>
-          </Link>
-          <Link to="/signup">
-            <button
-              onClick={() => {
-                navigate('/');
-                logOut();
-              }}
-              className="rounded bg-red-600 px-4 py-2 text-lg font-bold text-white md:text-2xl"
-            >
-              Log Out
-            </button>
-          </Link>
-        </div>
-      ) : (
-        <div>
-          <Link to="/login">
-            <button className="rounded px-4 py-2 text-lg font-bold text-white md:text-2xl">
-              Sign In
-            </button>
-          </Link>
-          <Link to="/signup">
-            <button className="rounded bg-red-600 px-4 py-2 text-lg font-bold text-white md:text-2xl">
-              Sign Up
-            </button>
-          </Link>
-        </div>
-      )}
+      {navButtons()}
     </div>
   );
 };
